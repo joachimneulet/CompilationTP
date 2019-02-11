@@ -1,7 +1,7 @@
 CC = gcc
 FLEX = flex
 YACC = bison -d -t
-LIBS = -lm 
+LIBS = -lm
 CCFLAGS = -Wall -ggdb
 
 OBJ = analyseur_lexical_flex.o util.o

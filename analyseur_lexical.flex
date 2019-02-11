@@ -12,38 +12,39 @@
 
 /* Déclarations à compléter ... */
 
+
 %%
-";" { return POINT_VIRGULE; }
-"+" { return PLUS; }
-"-" { return MOINS; }
-"*" { return FOIS; }
-"/" { return DIVISE; }
-"("+ { return PARENTHESE_OUVRANTE; }
-")"+ { return PARENTHESE_FERMANTE; }
-"[" { return CROCHET_OUVRANT; }
-"]" { return CROCHET_FERMANT; }
-"{"+ { return ACCOLADE_OUVRANTE; }
-"}"+ { return ACCOLADE_FERMANTE; }
-"="+ { return EGAL; }
-"<" { return INFERIEUR; }
-"&"+ { return ET; }
-"|"+ { return OU; }
-"!" { return NON; }
-"si" { return SI; }
-"alors" { return ALORS; }
-"sinon" { return SINON; }
-"tantque" { return TANTQUE; }
-"faire" { return FAIRE; }
-"entier" { return ENTIER; }
-"retour" { return RETOUR; }
-"lire" { return LIRE; }
-"ecrire" { return ECRIRE; }
-[a-zA-Z_$][a-zA-Z0-9_$]+ { return IDENTIF; }
-[0-9]+ { return NOMBRE; }
-"," { return VIRGULE; }
+;          { return POINT_VIRGULE; }
+"+"        { return PLUS; }
+-          { return MOINS; }
+"*"        { return FOIS; }
+"/"        { return DIVISE; }
+"("+       { return PARENTHESE_OUVRANTE; }
+")"+       { return PARENTHESE_FERMANTE; }
+"["        { return CROCHET_OUVRANT; }
+"]"        { return CROCHET_FERMANT; }
+"{"        { return ACCOLADE_OUVRANTE; }
+"}"        { return ACCOLADE_FERMANTE; }
+"="        { return EGAL; }
+"<"        { return INFERIEUR; }
+[&]+       { return ET; }
+"|"        { return OU; }
+"!"        { return NON; }
+si         { return SI; }
+alors      { return ALORS; }
+sinon      { return SINON; }
+tantque    { return TANTQUE; }
+faire      { return FAIRE; }
+entier     { return ENTIER; }
+retour     { return RETOUR; }
+lire       { return LIRE; }
+ecrire     { return ECRIRE; }
+[a-z_$]{1}[a-zA-Z0-9_$]+  { return IDENTIF; }
+[0-9]+     { return NOMBRE; }
+,          { return VIRGULE; }
 %%
 
-/* Code copié À LA FIN de l'analyseyur */
+/* Code copié À LA FIN de l'analyseur */
 
 int yywrap(){
   return 1;
