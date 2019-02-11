@@ -1,6 +1,6 @@
 CC = gcc
 FLEX = flex
-
+YACC = bison -d -t
 LIBS = -lm 
 CCFLAGS = -Wall -ggdb
 
@@ -10,6 +10,9 @@ all: compilo
 
 compilo: compilo.c $(OBJ)
 	$(CC) $(CCFLAGS) -o compilo compilo.c $(OBJ)
+
+analyseur_syntaxique.tab.c: analyseur_syntaxique.y
+	$(YACC)$<
 
 analyseur_lexical_flex.c: analyseur_lexical.flex
 	$(FLEX) -o $@ $<
