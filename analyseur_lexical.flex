@@ -3,8 +3,9 @@
  */
 %{
 /* code copié AU DÉBUT de l'analyseur */
+#include "syntabs.h"
+#include "analyseur_syntaxique.tab.h"
 
-#include "symboles.h"
 %}
 %option yylineno
 %option nounput
@@ -19,15 +20,15 @@
 -          { return MOINS; }
 "*"        { return FOIS; }
 "/"        { return DIVISE; }
-"("+       { return PARENTHESE_OUVRANTE; }
-")"+       { return PARENTHESE_FERMANTE; }
+"("        { return PARENTHESE_OUVRANTE; }
+")"        { return PARENTHESE_FERMANTE; }
 "["        { return CROCHET_OUVRANT; }
 "]"        { return CROCHET_FERMANT; }
 "{"        { return ACCOLADE_OUVRANTE; }
 "}"        { return ACCOLADE_FERMANTE; }
 "="        { return EGAL; }
 "<"        { return INFERIEUR; }
-[&]+       { return ET; }
+[&]        { return ET; }
 "|"        { return OU; }
 "!"        { return NON; }
 si         { return SI; }
@@ -39,9 +40,13 @@ entier     { return ENTIER; }
 retour     { return RETOUR; }
 lire       { return LIRE; }
 ecrire     { return ECRIRE; }
-[a-z_$]{1}[a-zA-Z0-9_$]+  { return IDENTIF; }
-[0-9]+     { return NOMBRE; }
+[a-z_$]{1}[a-zA-Z0-9_$]*  { yylval.type_chaine = strdup(yytext); return IDENTIF; }
+[0-9]+     { yylval.type_entier = atoi(yytext); return NOMBRE; }
 ,          { return VIRGULE; }
+\n         { ;}
+" "        { ;}
+[#]{1}[0-9A-Za-z ]*  { ;}
+
 %%
 
 /* Code copié À LA FIN de l'analyseur */

@@ -34,7 +34,7 @@
 # define YY_YY_ANALYSEUR_SYNTAXIQUE_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -78,7 +78,27 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+
+union YYSTYPE
+{
+#line 14 "analyseur_syntaxique.y" /* yacc.c:1909  */
+
+    int type_entier;
+    char* type_chaine;
+    n_l_instr* n_l_instr;
+    n_instr*  n_instr;
+    n_exp* n_exp;
+    n_l_exp* n_l_exp;
+    n_var* n_var;
+    n_l_dec* n_l_dec;
+    n_dec* n_dec;
+    n_prog* n_prog;
+    n_appel* n_appel;
+
+#line 99 "analyseur_syntaxique.tab.h" /* yacc.c:1909  */
+};
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
