@@ -4,7 +4,7 @@ YACC = bison -d -t
 LIBS = -lm
 CCFLAGS = -Wall -ggdb
 
-OBJ = analyseur_lexical_flex.o util.o syntabs.o affiche_arbre_abstrait.o analyseur_syntaxique.tab.o
+OBJ = analyseur_lexical_flex.o util.o syntabs.o affiche_arbre_abstrait.o analyseur_syntaxique.tab.o tabsymboles.o
 
 all: compilo
 
