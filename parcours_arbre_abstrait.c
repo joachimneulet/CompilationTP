@@ -115,7 +115,9 @@ void parcours_appel(n_appel *n)
   if (ligneCourante != -1) {
     if (tabsymboles.tab[ligneCourante].complement == nbArgsAppel) {
       if (rechercheExecutable("main") != -1) {
+        entreeFonction();
         parcours_l_exp(n->args);
+        sortieFonction(1);
       }
     }
   }
@@ -229,13 +231,17 @@ void parcours_foncDec(n_dec *n)
   if (rechercheDeclarative(n->nom) == -1) {
     int taille = 0;
     //Calcule le nombre de paramètres de la fonction
-    while (n->u.foncDec_.param->queue != NULL) {
+    n_l_dec *tmp = n->u.foncDec_.param;
+    while (tmp != NULL) {
+      tmp = tmp->queue;
       taille = taille + 1;
     }
     ajouteIdentificateur(n->nom, P_VARIABLE_GLOBALE, T_FONCTION, 0, taille);
+    entreeFonction();
     parcours_l_dec(n->u.foncDec_.param);
     parcours_l_dec(n->u.foncDec_.variables);
     parcours_instr(n->u.foncDec_.corps);
+    sortieFonction(1);
   }
 
 
@@ -282,22 +288,30 @@ void parcours_var(n_var *n)
 /*-------------------------------------------------------------------------*/
 void parcours_var_simple(n_var *n)
 {
+  //Verifier que c'est un entier (T_ENTIER)
   int ligneCourante = rechercheExecutable(n->nom);
   if (ligneCourante != -1) {
-    if (tabsymboles.tab[ligneCourante].portee == P_VARIABLE_LOCALE ||
-        tabsymboles.tab[ligneCourante].portee == P_VARIABLE_GLOBALE ||
-        tabsymboles.tab[ligneCourante].portee == P_ARGUMENT)
-    {
+    if (tabsymboles.tab[ligneCourante].type == T_ENTIER) {
 
+    } else {
+      erreur("Problème de type");
     }
+  } else {
+    erreur("Variable non declarée");
   }
 }
 
 /*-------------------------------------------------------------------------*/
 void parcours_var_indicee(n_var *n)
 {
-  if (rechercheExecutable(n->nom) != -1) {
-    parcours_exp(n->u.indicee_.indice);
+  //Verfier que c'est un tableau indicé de portée globale
+  int ligneCourante = rechercheExecutable(n->nom);
+  if (ligneCourante != -1) {
+    if (tabsymboles.tab[ligneCourante].type == T_TABLEAU_ENTIER) {
+      if (tabsymboles.tab[ligneCourante].portee == P_VARIABLE_GLOBALE) {
+        parcours_exp(n->u.indicee_.indice);
+      }
+    }
   }
 }
 /*-------------------------------------------------------------------------*/

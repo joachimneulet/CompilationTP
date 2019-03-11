@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
   if(affiche_code3a){
   	//Affiche code 3a
   }
-  if(affiche_tabsymb){
+  if(affiche_tabsymb) {
     yyparse();
     parcours_n_prog(n);
   }
