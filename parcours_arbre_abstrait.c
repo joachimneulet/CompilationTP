@@ -37,6 +37,7 @@ void parcours_appel(n_appel *n);
 
 void parcours_n_prog(n_prog *n)
 {
+  portee = P_VARIABLE_GLOBALE;
   parcours_l_dec(n->variables);
   parcours_l_dec(n->fonctions);
 }
@@ -56,7 +57,7 @@ void parcours_l_instr(n_l_instr *n)
 
 void parcours_instr(n_instr *n)
 {
-  if(n){
+  if(n) {
     if(n->type == blocInst) parcours_l_instr(n->u.liste);
     else if(n->type == affecteInst) parcours_instr_affect(n);
     else if(n->type == siInst) parcours_instr_si(n);
@@ -107,17 +108,20 @@ void parcours_instr_appel(n_instr *n)
 void parcours_appel(n_appel *n)
 {
   int nbArgsAppel = 0;
+  n_l_exp *tmp = n->args;
   //Calcule le nombre de paramètres de la fonction
-  while (n->args->queue != NULL) {
+  while (tmp != NULL) {
+    tmp = tmp->queue;
     nbArgsAppel = nbArgsAppel + 1;
   }
+
   int ligneCourante = rechercheExecutable(n->fonction);
   if (ligneCourante != -1) {
     if (tabsymboles.tab[ligneCourante].complement == nbArgsAppel) {
       if (rechercheExecutable("main") != -1) {
-        entreeFonction();
+        //entreeFonction();
         parcours_l_exp(n->args);
-        sortieFonction(1);
+        //sortieFonction(1);
       }
     }
   }
@@ -151,7 +155,6 @@ void parcours_l_exp(n_l_exp *n)
 
 void parcours_exp(n_exp *n)
 {
-
   if(n->type == varExp) parcours_varExp(n);
   else if(n->type == opExp) parcours_opExp(n);
   else if(n->type == intExp) parcours_intExp(n);
@@ -238,7 +241,9 @@ void parcours_foncDec(n_dec *n)
     }
     ajouteIdentificateur(n->nom, P_VARIABLE_GLOBALE, T_FONCTION, 0, taille);
     entreeFonction();
+    portee = P_ARGUMENT;
     parcours_l_dec(n->u.foncDec_.param);
+    portee = P_VARIABLE_LOCALE;
     parcours_l_dec(n->u.foncDec_.variables);
     parcours_instr(n->u.foncDec_.corps);
     sortieFonction(1);
@@ -253,13 +258,16 @@ void parcours_varDec(n_dec *n)
 {
   if (rechercheDeclarative(n->nom) == -1) {
     if (portee == P_VARIABLE_LOCALE) {
-      ajouteIdentificateur(n->nom, P_VARIABLE_LOCALE, T_ENTIER, adresseLocaleCourante+4, 1);
+      ajouteIdentificateur(n->nom, P_VARIABLE_LOCALE, T_ENTIER, adresseLocaleCourante, 1);
+      adresseLocaleCourante += 4;
     }
     if (portee == P_VARIABLE_GLOBALE) {
-      ajouteIdentificateur(n->nom, P_VARIABLE_GLOBALE, T_ENTIER, adresseGlobaleCourante+4, 1);
+      ajouteIdentificateur(n->nom, P_VARIABLE_GLOBALE, T_ENTIER, adresseGlobaleCourante, 1);
+      adresseGlobaleCourante += 4;
     }
     if (portee == P_ARGUMENT) {
-      ajouteIdentificateur(n->nom, P_ARGUMENT, T_ENTIER, adresseArgumentCourant+4, 1);
+      ajouteIdentificateur(n->nom, P_ARGUMENT, T_ENTIER, adresseArgumentCourant, 1);
+      adresseArgumentCourant += 4;
     }
   }
 }
@@ -269,7 +277,8 @@ void parcours_varDec(n_dec *n)
 void parcours_tabDec(n_dec *n)
 {
   if (rechercheDeclarative(n->nom) == -1) {
-    ajouteIdentificateur(n->nom, P_VARIABLE_GLOBALE, T_TABLEAU_ENTIER, adresseGlobaleCourante+4*n->u.tabDec_.taille, n->u.tabDec_.taille);
+    ajouteIdentificateur(n->nom, P_VARIABLE_GLOBALE, T_TABLEAU_ENTIER, adresseGlobaleCourante, n->u.tabDec_.taille);
+    adresseGlobaleCourante = adresseGlobaleCourante + 4 * n->u.tabDec_.taille;
   }
 }
 

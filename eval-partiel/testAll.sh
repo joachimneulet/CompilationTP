@@ -41,7 +41,7 @@ declare -A MYCOMPILOV                   # déclare un tableau (ne pas toucher)
 MYCOMPILOV["default"]="${MYCOMPILO} -a" # utilisé pour test erreur
 MYCOMPILOV["lex"]="${MYCOMPILO} -l"     # exécuter l'analyseur lexical
 MYCOMPILOV["asynt"]="${MYCOMPILO} -a"   # afficher l'arbre abstrait
-#MYCOMPILOV["tab"]="${MYCOMPILO} -t"    # afficher les tables des symboles
+MYCOMPILOV["tab"]="${MYCOMPILO} -t"    # afficher les tables des symboles
 #MYCOMPILOV["3a"]="${MYCOMPILO} -3"     # afficher les tables des symboles
 #MYCOMPILOV["nasm"]="${MYCOMPILO} -n"   # générer code Intel
 #NASM="nasm"                            # utilisez autre version de nasm si besoin
@@ -241,6 +241,15 @@ function test_fichier_ok() {
           ${MYCOMPILOV["asynt"]} input/$input.l > output/$input.asynt   2> /dev/null
         fi
         diff_prog XMLDIFF $input asynt
+      fi
+      # Teste table des symboles
+      if [ -n "${MYCOMPILOV[tab]}" ]; then
+        if [ $VERBOSE -eq 1 ]; then
+          ${MYCOMPILOV["tab"]} input/$input.l > output/$input.tab
+        else
+          ${MYCOMPILOV["tab"]} input/$input.l > output/$input.tab   2> /dev/null
+        fi
+        diff_prog REGDIFF $input tab
       fi
     else
       echo -e "\033[31minput/$input.l non trouvé\033[0m"
