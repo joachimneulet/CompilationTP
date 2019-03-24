@@ -1,0 +1,90 @@
+0000           : alloc 10 v$tab		; $tab
+0001 >finitialiser : fbegin
+0002           : v$tab[0] = 8
+0003           : v$tab[1] = 6
+0004           : v$tab[2] = 9
+0005           : v$tab[3] = 9
+0006           : v$tab[4] = 4
+0007           : v$tab[5] = 2
+0008           : v$tab[6] = 3
+0009           : v$tab[7] = 1
+0010           : v$tab[8] = 4
+0011           : v$tab[9] = 5
+0012           : fend
+0013 >fafficher : fbegin
+0014           : alloc 1 v$i		; $i
+0015           : v$i = 0
+0016 >      e0 : if v$i < v$n goto e2
+0017           : t0 = 0
+0018           : goto e3
+0019 >      e2 : t0 = -1
+0020 >      e3 : if t0 == 0 goto e1
+0021           : t1 = v$i
+0022           : write v$tab[t1]
+0023           : t2 = v$i + 1
+0024           : v$i = t2
+0025           : goto e0
+0026 >      e1 : write 0
+0027           : fend
+0028 >fechanger : fbegin
+0029           : alloc 1 v$temp		; $temp
+0030           : t3 = v$j
+0031           : v$temp = v$tab[t3]
+0032           : t4 = v$j
+0033           : t5 = v$i
+0034           : v$tab[t4] = v$tab[t5]
+0035           : t6 = v$i
+0036           : v$tab[t6] = v$temp
+0037           : fend
+0038 >  ftrier : fbegin
+0039           : alloc 1 v$echange		; $echange
+0040           : alloc 1 v$j		; $j
+0041           : alloc 1 v$m		; $m
+0042           : v$m = v$n
+0043           : v$echange = 1
+0044 >      e4 : if v$echange == 1 goto e6
+0045           : t7 = 0
+0046           : goto e7
+0047 >      e6 : t7 = -1
+0048 >      e7 : if t7 == 0 goto e5
+0049           : v$echange = 0
+0050           : v$j = 0
+0051 >      e8 : t8 = v$m - 1
+0052           : if v$j < t8 goto e10
+0053           : t9 = 0
+0054           : goto e11
+0055 >     e10 : t9 = -1
+0056 >     e11 : if t9 == 0 goto e9
+0057           : t10 = v$j + 1
+0058           : t11 = v$j
+0059           : if v$tab[t10] < v$tab[t11] goto e14
+0060           : t12 = 0
+0061           : goto e15
+0062 >     e14 : t12 = -1
+0063 >     e15 : if t12 == 0 goto e13
+0064           : alloc 1		; alloue place pour la valeur de retour
+0065           : param v$j
+0066           : t13 = v$j + 1
+0067           : param t13
+0068           : call fechanger
+0069           : v$echange = 1
+0070 >     e13 : t14 = v$j + 1
+0071           : v$j = t14
+0072           : goto e8
+0073 >      e9 : t15 = v$m - 1
+0074           : v$m = t15
+0075           : goto e4
+0076 >      e5 : fend
+0077 >   fmain : fbegin
+0078           : alloc 1		; alloue place pour la valeur de retour
+0079           : call finitialiser
+0080           : alloc 1		; alloue place pour la valeur de retour
+0081           : param 10
+0082           : call fafficher
+0083           : alloc 1		; alloue place pour la valeur de retour
+0084           : param 10
+0085           : call ftrier
+0086           : alloc 1		; alloue place pour la valeur de retour
+0087           : param 10
+0088           : call fafficher
+0089           : fend
