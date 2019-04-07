@@ -11,6 +11,7 @@
 #include "code3a.h"
 #include "tabsymboles.h"
 #include "parcours_arbre_abstrait.c"
+#include "c3a2nasm.h"
 
 
 FILE *yyin;
@@ -105,7 +106,7 @@ int main(int argc, char **argv) {
     yyparse();
     affiche_n_prog(n);
   }
-  if(affiche_code3a){
+  if(affiche_code3a) {
     yyparse();
     parcours_n_prog(n);
     code3a_affiche_code();
@@ -114,8 +115,10 @@ int main(int argc, char **argv) {
     yyparse();
     parcours_n_prog(n);
   }
-  if(affiche_nasm){
-    //Affiche code cible NASM
+  if(affiche_nasm) {
+    yyparse();
+    parcours_n_prog(n);
+    c3a2nasm_generer();
   }
   return 0;
 }
