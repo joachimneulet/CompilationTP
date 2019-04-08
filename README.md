@@ -18,7 +18,7 @@ A la racine faire :
 
 ### Remarques :
 
-* Lors de l'évaluation, les programmes n'étaient pas rejetés car je n'avais pas appelé la méthode ' erreur("Erreur !") '.
-Maintenant tous les prgrammes des "tests connus" et des "tests nouveaux" sont rejetés.
+* Lors de l'évaluation, les programmes n'étaient pas rejetés car nous n'avions pas appelé la méthode ' erreur("Erreur !") '.
+Maintenant tous les programmes des "tests connus" et des "tests nouveaux" sont rejetés.
 
-* Le code 3adresses est différent des fichiers de référence car j'ai des mis des commentaires.    
+* Le code 3adresses est différent des fichiers de référence car nous avons mis des commentaires.    
