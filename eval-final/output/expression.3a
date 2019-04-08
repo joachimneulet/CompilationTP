@@ -1,0 +1,10 @@
+0000           : alloc 1 v$a		; Alloue de la memoire pour une variable
+0001           : alloc 1 v$b		; Alloue de la memoire pour une variable
+0002 >   fmain : fbegin		; Debut declaration de fonction
+0003           : t0 = read 		; Expression lire
+0004           : v$a = t0		; Affectation
+0005           : t1 = read 		; Expression lire
+0006           : v$b = t1		; Affectation
+0007           : t2 = v$a + v$b		; Expression arith
+0008           : write t2		; Instruction ecrire
+0009           : fend		; Fin declaration de fonction

@@ -1,0 +1,5 @@
+0000           : alloc 10 v$tab		; Alloue de la memoire pour un tableau
+0001 >   fmain : fbegin		; Debut declaration de fonction
+0002           : v$tab[4] = 4		; Affectation
+0003           : write v$tab[4]		; Instruction ecrire
+0004           : fend		; Fin declaration de fonction

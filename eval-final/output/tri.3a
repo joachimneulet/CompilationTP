@@ -1,0 +1,86 @@
+0000           : alloc 10 v$tab		; Alloue de la memoire pour un tableau
+0001 >finitialiser : fbegin		; Debut declaration de fonction
+0002           : v$tab[0] = 8		; Affectation
+0003           : v$tab[1] = 6		; Affectation
+0004           : v$tab[2] = 9		; Affectation
+0005           : v$tab[3] = 9		; Affectation
+0006           : v$tab[4] = 4		; Affectation
+0007           : v$tab[5] = 2		; Affectation
+0008           : v$tab[6] = 3		; Affectation
+0009           : v$tab[7] = 1		; Affectation
+0010           : v$tab[8] = 4		; Affectation
+0011           : v$tab[9] = 5		; Affectation
+0012           : fend		; Fin declaration de fonction
+0013 >fafficher : fbegin		; Debut declaration de fonction
+0014           : alloc 1 v$i		; Alloue de la memoire pour une variable
+0015           : v$i = 0		; Affectation
+0016 >      e0 : t0 = -1		; Affectation
+0017           : if v$i < v$n goto e2		; Si inferieur goto
+0018           : t0 = 0		; Affectation
+0019 >      e2 : if t0 == 0 goto e1		; Si egal goto
+0020           : t1 = v$i		; Affectation
+0021           : write v$tab[t1]		; Instruction ecrire
+0022           : t2 = v$i + 1		; Expression arith
+0023           : v$i = t2		; Affectation
+0024           : goto e0		; Goto etiquette
+0025 >      e1 : write 0		; Instruction ecrire
+0026           : fend		; Fin declaration de fonction
+0027 >fechanger : fbegin		; Debut declaration de fonction
+0028           : alloc 1 v$temp		; Alloue de la memoire pour une variable
+0029           : t3 = v$j		; Affectation
+0030           : v$temp = v$tab[t3]		; Affectation
+0031           : t4 = v$j		; Affectation
+0032           : t5 = v$i		; Affectation
+0033           : v$tab[t4] = v$tab[t5]		; Affectation
+0034           : t6 = v$i		; Affectation
+0035           : v$tab[t6] = v$temp		; Affectation
+0036           : fend		; Fin declaration de fonction
+0037 >  ftrier : fbegin		; Debut declaration de fonction
+0038           : alloc 1 v$echange		; Alloue de la memoire pour une variable
+0039           : alloc 1 v$j		; Alloue de la memoire pour une variable
+0040           : alloc 1 v$m		; Alloue de la memoire pour une variable
+0041           : v$m = v$n		; Affectation
+0042           : v$echange = 1		; Affectation
+0043 >      e3 : t7 = -1		; Affectation
+0044           : if v$echange == 1 goto e5		; Si egal goto
+0045           : t7 = 0		; Affectation
+0046 >      e5 : if t7 == 0 goto e4		; Si egal goto
+0047           : v$echange = 0		; Affectation
+0048           : v$j = 0		; Affectation
+0049 >      e6 : t9 = v$m - 1		; Expression arith
+0050           : t8 = -1		; Affectation
+0051           : if v$j < t9 goto e8		; Si inferieur goto
+0052           : t8 = 0		; Affectation
+0053 >      e8 : if t8 == 0 goto e7		; Si egal goto
+0054           : t10 = v$j + 1		; Expression arith
+0055           : t11 = v$j		; Affectation
+0056           : t12 = -1		; Affectation
+0057           : if v$tab[t10] < v$tab[t11] goto e11		; Si inferieur goto
+0058           : t12 = 0		; Affectation
+0059 >     e11 : if t12 == 0 goto e10		; Si egal goto
+0060           : alloc 1		; alloue place pour la valeur de retour
+0061           : param v$j		; param
+0062           : t13 = v$j + 1		; Expression arith
+0063           : param t13		; param
+0064           : call fechanger		; call
+0065           : v$echange = 1		; Affectation
+0066 >     e10 : t14 = v$j + 1		; Expression arith
+0067           : v$j = t14		; Affectation
+0068           : goto e6		; Goto etiquette
+0069 >      e7 : t15 = v$m - 1		; Expression arith
+0070           : v$m = t15		; Affectation
+0071           : goto e3		; Goto etiquette
+0072 >      e4 : fend		; Fin declaration de fonction
+0073 >   fmain : fbegin		; Debut declaration de fonction
+0074           : alloc 1		; alloue place pour la valeur de retour
+0075           : t16 = call finitialiser		; call
+0076           : alloc 1		; alloue place pour la valeur de retour
+0077           : param 10		; param
+0078           : t17 = call fafficher		; call
+0079           : alloc 1		; alloue place pour la valeur de retour
+0080           : param 10		; param
+0081           : t18 = call ftrier		; call
+0082           : alloc 1		; alloue place pour la valeur de retour
+0083           : param 10		; param
+0084           : t19 = call fafficher		; call
+0085           : fend		; Fin declaration de fonction

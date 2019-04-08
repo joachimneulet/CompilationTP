@@ -196,3 +196,14 @@ n_l_dec *cree_n_l_dec(n_dec *tete, n_l_dec *queue)
   return n;
 }
 
+n_instr *cree_n_instr_pour(n_instr *init, n_exp *expression, n_instr *increment, n_instr *faire)
+{
+  n_instr *n = malloc(sizeof(n_instr));
+  n->type = pourInst;
+  n->u.pour_.init = init;
+  n->u.pour_.expression = expression;
+  n->u.pour_.increment = increment;
+  n->u.pour_.faire = faire;
+  return n;
+
+}

@@ -1,0 +1,29 @@
+0000 >    fmax : fbegin		; Debut declaration de fonction
+0001           : t0 = -1		; Affectation
+0002           : if v$a < v$b goto e2		; Si inferieur goto
+0003           : t0 = 0		; Affectation
+0004 >      e2 : if t0 == 0 goto e1		; Si egal goto
+0005           : ret v$b		; sauvegarder la valeur de retour
+0006           : fend		; Fin declaration de fonction
+0007 >      e1 : ret v$a		; sauvegarder la valeur de retour
+0008           : fend		; Fin declaration de fonction
+0009           : fend		; Fin declaration de fonction
+0010 >   fmain : fbegin		; Debut declaration de fonction
+0011           : alloc 1 v$v_1		; Alloue de la memoire pour une variable
+0012           : alloc 1 v$v_2		; Alloue de la memoire pour une variable
+0013           : t1 = read 		; Expression lire
+0014           : v$v_1 = t1		; Affectation
+0015           : t2 = read 		; Expression lire
+0016           : v$v_2 = t2		; Affectation
+0017           : alloc 1		; alloue place pour la valeur de retour
+0018           : param v$v_1		; param
+0019           : param v$v_2		; param
+0020           : t3 = call fmax		; call
+0021           : t4 = -1		; Affectation
+0022           : if t3 == v$v_1 goto e5		; Si egal goto
+0023           : t4 = 0		; Affectation
+0024 >      e5 : if t4 == 0 goto e4		; Si egal goto
+0025           : write v$v_1		; Instruction ecrire
+0026           : goto e3		; Goto etiquette
+0027 >      e4 : write v$v_2		; Instruction ecrire
+0028 >      e3 : fend		; Fin declaration de fonction

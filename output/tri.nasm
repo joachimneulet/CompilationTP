@@ -1,3 +1,52 @@
+------------------------------------------
+base = 2
+sommet = 2
+0 $tab GLOBALE TABLEAU 0 10
+1 initialiser GLOBALE FONCTION 0 0
+------------------------------------------
+------------------------------------------
+base = 3
+sommet = 5
+0 $tab GLOBALE TABLEAU 0 10
+1 initialiser GLOBALE FONCTION 0 0
+2 afficher GLOBALE FONCTION 0 1
+3 $n ARGUMENT ENTIER 0 1
+4 $i LOCALE ENTIER 0 1
+------------------------------------------
+------------------------------------------
+base = 4
+sommet = 7
+0 $tab GLOBALE TABLEAU 0 10
+1 initialiser GLOBALE FONCTION 0 0
+2 afficher GLOBALE FONCTION 0 1
+3 echanger GLOBALE FONCTION 0 2
+4 $i ARGUMENT ENTIER 0 1
+5 $j ARGUMENT ENTIER 4 1
+6 $temp LOCALE ENTIER 0 1
+------------------------------------------
+------------------------------------------
+base = 5
+sommet = 9
+0 $tab GLOBALE TABLEAU 0 10
+1 initialiser GLOBALE FONCTION 0 0
+2 afficher GLOBALE FONCTION 0 1
+3 echanger GLOBALE FONCTION 0 2
+4 trier GLOBALE FONCTION 0 1
+5 $n ARGUMENT ENTIER 0 1
+6 $echange LOCALE ENTIER 0 1
+7 $j LOCALE ENTIER 4 1
+8 $m LOCALE ENTIER 8 1
+------------------------------------------
+------------------------------------------
+base = 6
+sommet = 6
+0 $tab GLOBALE TABLEAU 0 10
+1 initialiser GLOBALE FONCTION 0 0
+2 afficher GLOBALE FONCTION 0 1
+3 echanger GLOBALE FONCTION 0 2
+4 trier GLOBALE FONCTION 0 1
+5 main GLOBALE FONCTION 0 0
+------------------------------------------
 %include	'io.asm'
 
 section	.bss
@@ -129,7 +178,7 @@ e11:
 	add	eax, 1
 	push	eax
 	call	fechanger
-	add	esp, 8		; desallocation parametres
+	add	esp, 8
 	add	esp, 4
 	mov	dword [ebp - 4], 1
 e10:
@@ -155,17 +204,17 @@ fmain:
 	sub	esp, 4
 	push	10
 	call	fafficher
-	add	esp, 4		; desallocation parametres
+	add	esp, 4
 	pop	eax
 	sub	esp, 4
 	push	10
 	call	ftrier
-	add	esp, 4		; desallocation parametres
+	add	esp, 4
 	pop	eax
 	sub	esp, 4
 	push	10
 	call	fafficher
-	add	esp, 4		; desallocation parametres
+	add	esp, 4
 	pop	eax
 	pop	ebp
 	ret

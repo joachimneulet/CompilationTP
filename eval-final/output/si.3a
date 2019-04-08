@@ -1,0 +1,5 @@
+0000           : alloc 1 v$a		; Alloue de la memoire pour une variable
+0001 >   fmain : fbegin		; Debut declaration de fonction
+0002           : if 0 == 0 goto e1		; Si egal goto
+0003           : write 1		; Instruction ecrire
+0004 >      e1 : fend		; Fin declaration de fonction

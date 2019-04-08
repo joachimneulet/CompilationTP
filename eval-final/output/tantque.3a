@@ -1,0 +1,9 @@
+0000           : alloc 1 v$a		; Alloue de la memoire pour une variable
+0001 >   fmain : fbegin		; Debut declaration de fonction
+0002           : v$a = 100		; Affectation
+0003 >      e0 : if v$a == 0 goto e1		; Si egal goto
+0004           : write v$a		; Instruction ecrire
+0005           : t1 = v$a - 1		; Expression arith
+0006           : v$a = t1		; Affectation
+0007           : goto e0		; Goto etiquette
+0008 >      e1 : fend		; Fin declaration de fonction

@@ -1,0 +1,4 @@
+0000           : alloc 1 v$a		; Alloue de la memoire pour une variable
+0001 >   fmain : fbegin		; Debut declaration de fonction
+0002           : v$a = 123		; Affectation
+0003           : fend		; Fin declaration de fonction

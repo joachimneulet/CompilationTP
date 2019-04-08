@@ -35,6 +35,7 @@ operande *parcours_var(n_var *n);
 operande *parcours_var_simple(n_var *n);
 operande *parcours_var_indicee(n_var *n);
 operande *parcours_appel(n_appel *n);
+void parcours_instr_pour(n_instr *n);
 
 /*-------------------------------------------------------------------------*/
 
@@ -69,6 +70,7 @@ void parcours_instr(n_instr *n)
     else if(n->type == appelInst) parcours_instr_appel(n);
     else if(n->type == retourInst) parcours_instr_retour(n);
     else if(n->type == ecrireInst) parcours_instr_ecrire(n);
+    else if(n->type == pourInst) parcours_instr_pour(n);
   }
 }
 
@@ -87,17 +89,26 @@ void parcours_instr_si(n_instr *n)
   operande *constante1 = code3a_new_constante(-1);
   varTempCourante = code3a_new_temporaire();
 
-  code3a_ajoute_instruction(assign, constante1, NULL, varTempCourante, "Affectation");
+  if (n->u.si_.test->type != opExp) {
 
-  if (n->u.si_.test->u.opExp_.op == inferieur) {
-    code3a_ajoute_instruction(jump_if_less, oper1, oper2, etiquette2, "Si inferieur goto");
-  } else if (n->u.si_.test->u.opExp_.op == egal) {
-    code3a_ajoute_instruction(jump_if_equal, oper1, oper2, etiquette2, "Si egal goto");
+    operande *var = parcours_exp(n->u.si_.test);
+    code3a_ajoute_instruction(jump_if_equal, var, constante0, etiquette1, "Si egal goto");
+
+  } else {
+
+    code3a_ajoute_instruction(assign, constante1, NULL, varTempCourante, "Affectation");
+
+    if (n->u.si_.test->u.opExp_.op == inferieur) {
+      code3a_ajoute_instruction(jump_if_less, oper1, oper2, etiquette2, "Si inferieur goto");
+    } else if (n->u.si_.test->u.opExp_.op == egal) {
+      code3a_ajoute_instruction(jump_if_equal, oper1, oper2, etiquette2, "Si egal goto");
+    }
+
+    code3a_ajoute_instruction(assign, constante0, NULL, varTempCourante, "Affectation");
+    code3a_ajoute_etiquette(etiquette2->u.oper_nom);
+    code3a_ajoute_instruction(jump_if_equal, varTempCourante, constante0, etiquette1, "Si egal goto");
+
   }
-
-  code3a_ajoute_instruction(assign, constante0, NULL, varTempCourante, "Affectation");
-  code3a_ajoute_etiquette(etiquette2->u.oper_nom);
-  code3a_ajoute_instruction(jump_if_equal, varTempCourante, constante0, etiquette1, "Si egal goto");
 
   parcours_instr(n->u.si_.alors);
 
@@ -134,22 +145,31 @@ void parcours_instr_tantque(n_instr *n)
   operande *oper1 = parcours_exp(n->u.tantque_.test->u.opExp_.op1);
   operande *oper2 = parcours_exp(n->u.tantque_.test->u.opExp_.op2);
 
-  code3a_ajoute_instruction(assign, constante1, NULL, varTempCourante, "Affectation");
+  if (n->u.tantque_.test->type != opExp) {
 
-  if (n->u.si_.test->u.opExp_.op == inferieur) {
-    code3a_ajoute_instruction(jump_if_less, oper1, oper2, etiquette2, "Si inferieur goto");
-  } else if (n->u.si_.test->u.opExp_.op == egal) {
-    code3a_ajoute_instruction(jump_if_equal, oper1, oper2, etiquette2, "Si egal goto");
+    operande *var = parcours_exp(n->u.tantque_.test);
+    code3a_ajoute_instruction(jump_if_equal, var, constante0, etiquette1, "Si egal goto");
+
+  } else {
+
+    code3a_ajoute_instruction(assign, constante1, NULL, varTempCourante, "Affectation");
+
+    if (n->u.si_.test->u.opExp_.op == inferieur) {
+      code3a_ajoute_instruction(jump_if_less, oper1, oper2, etiquette2, "Si inferieur goto");
+    } else if (n->u.si_.test->u.opExp_.op == egal) {
+      code3a_ajoute_instruction(jump_if_equal, oper1, oper2, etiquette2, "Si egal goto");
+    }
+
+    code3a_ajoute_instruction(assign, constante0, NULL, varTempCourante, "Affectation");
+    code3a_ajoute_etiquette(etiquette2->u.oper_nom);
+    code3a_ajoute_instruction(jump_if_equal, varTempCourante, constante0, etiquette1, "Si egal goto");
+
   }
 
-  code3a_ajoute_instruction(assign, constante0, NULL, varTempCourante, "Affectation");
-  code3a_ajoute_etiquette(etiquette2->u.oper_nom);
-  code3a_ajoute_instruction(jump_if_equal, varTempCourante, constante0, etiquette1, "Si egal goto");
+    parcours_instr(n->u.tantque_.faire);
 
-  parcours_instr(n->u.tantque_.faire);
-
-  code3a_ajoute_instruction(jump, etiquette0, NULL, NULL, "Goto etiquette");
-  code3a_ajoute_etiquette(etiquette1->u.oper_nom);
+    code3a_ajoute_instruction(jump, etiquette0, NULL, NULL, "Goto etiquette");
+    code3a_ajoute_etiquette(etiquette1->u.oper_nom);
 
 }
 
@@ -165,6 +185,8 @@ void parcours_instr_affect(n_instr *n)
 
     code3a_ajoute_instruction(assign, oper, NULL, result, "Affectation");
 
+  } else {
+    erreur("Variable non déclarée");
   }
 }
 
@@ -209,6 +231,8 @@ operande *parcours_appel(n_appel *n)
         code3a_ajoute_instruction(func_call, code3a_new_etiquette(fFonction), NULL, NULL, "call");
       }
     }
+  } else {
+    erreur("Fonction non déclarée");
   }
 }
 
@@ -216,12 +240,9 @@ operande *parcours_appel(n_appel *n)
 
 void parcours_instr_retour(n_instr *n)
 {
-  parcours_exp(n->u.retour_.expression);
-  if (n->u.retour_.expression->type == varExp) {
-    operande *var = code3a_new_var(n->u.retour_.expression->u.var->nom, portee, adresseGlobaleCourante);
-    code3a_ajoute_instruction(func_val_ret, var, NULL, NULL, "sauvegarder la valeur de retour");
-    code3a_ajoute_instruction(func_end, NULL, NULL, NULL, "Fin declaration de fonction");
-  }
+  operande *var = parcours_exp(n->u.retour_.expression);
+  code3a_ajoute_instruction(func_val_ret, var, NULL, NULL, "sauvegarder la valeur de retour");
+  code3a_ajoute_instruction(func_end, NULL, NULL, NULL, "Fin declaration de fonction");
 }
 
 /*-------------------------------------------------------------------------*/
@@ -248,11 +269,13 @@ operande *parcours_l_exp(n_l_exp *n)
 
 operande *parcours_exp(n_exp *n)
 {
-  if(n->type == varExp) return parcours_varExp(n);
-  else if(n->type == opExp) return parcours_opExp(n);
-  else if(n->type == intExp) return parcours_intExp(n);
-  else if(n->type == appelExp) return parcours_appelExp(n);
-  else if(n->type == lireExp) parcours_lireExp(n);
+  if (n != NULL) {
+    if(n->type == varExp) return parcours_varExp(n);
+    else if(n->type == opExp) return parcours_opExp(n);
+    else if(n->type == intExp) return parcours_intExp(n);
+    else if(n->type == appelExp) return parcours_appelExp(n);
+    else if(n->type == lireExp) parcours_lireExp(n);
+  }
 }
 
 /*-------------------------------------------------------------------------*/
@@ -364,6 +387,8 @@ void parcours_foncDec(n_dec *n)
 
     code3a_ajoute_instruction(func_end, NULL, NULL, NULL, "Fin declaration de fonction");
 
+  } else {
+    erreur("Fonction déjà déclarée");
   }
 
 
@@ -388,6 +413,8 @@ void parcours_varDec(n_dec *n)
       ajouteIdentificateur(n->nom, P_ARGUMENT, T_ENTIER, adresseArgumentCourant, 1);
       adresseArgumentCourant += 4;
     }
+  } else {
+    erreur("Variable déjà declarée");
   }
 }
 
@@ -457,3 +484,21 @@ operande *parcours_var_indicee(n_var *n)
   }
 }
 /*-------------------------------------------------------------------------*/
+
+void parcours_instr_pour(n_instr *n)
+{
+  operande *e0 = code3a_new_etiquette_auto();
+	operande *e1 = code3a_new_etiquette_auto();
+  
+	parcours_instr(n->u.pour_.init);
+	code3a_ajoute_etiquette(e0->u.oper_nom);
+
+	operande *oper = parcours_exp(n->u.pour_.expression);
+	code3a_ajoute_instruction(jump_if_equal, oper, code3a_new_constante(0), e1, NULL);
+
+	parcours_instr(n->u.pour_.faire);
+	parcours_instr(n->u.pour_.increment);
+  code3a_ajoute_instruction(jump,e0,NULL,NULL,NULL);
+  code3a_ajoute_etiquette(e1->u.oper_nom);
+
+}

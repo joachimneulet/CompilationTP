@@ -1,0 +1,6 @@
+0000           : alloc 1 v$a		; Alloue de la memoire pour une variable
+0001 >   fmain : fbegin		; Debut declaration de fonction
+0002           : t0 = 5 - 3		; Expression arith
+0003           : t1 = t0 + 2		; Expression arith
+0004           : write t1		; Instruction ecrire
+0005           : fend		; Fin declaration de fonction

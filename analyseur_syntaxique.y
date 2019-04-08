@@ -50,6 +50,7 @@
 %token RETOUR
 %token LIRE
 %token ECRIRE
+%token POUR
 %token <type_chaine> IDENTIF
 %token <type_entier> NOMBRE
 %token VIRGULE
@@ -65,6 +66,7 @@
 %type <n_l_exp> expression_liste
 %type <n_instr> instruction
 %type <n_instr> instruction_affect
+
 %type <n_l_instr> instruction_liste
 %type <n_dec> fonction_dec
 %type <n_l_dec> fonction_dec_liste
@@ -135,6 +137,7 @@ instruction : SI expression ALORS ACCOLADE_OUVRANTE instruction_liste ACCOLADE_F
     | RETOUR expression POINT_VIRGULE { $$ = cree_n_instr_retour($2); }
     | POINT_VIRGULE { $$ = cree_n_instr_vide(); }
     | instruction_affect { $$ = $1; }
+    | POUR instruction_affect expression POINT_VIRGULE instruction_affect FAIRE instruction { $$ = cree_n_instr_pour($2, $3, $5, $7); }
     ;
 
 instruction_affect : variable EGAL expression POINT_VIRGULE { $$ = cree_n_instr_affect($1, $3); }

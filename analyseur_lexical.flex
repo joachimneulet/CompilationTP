@@ -40,6 +40,7 @@ entier     { return ENTIER; }
 retour     { return RETOUR; }
 lire       { return LIRE; }
 ecrire     { return ECRIRE; }
+"pour"     { return POUR; }
 [a-z_$]{1}[a-zA-Z0-9_$]*  { yylval.type_chaine = strdup(yytext); return IDENTIF; }
 [0-9]+     { yylval.type_entier = atoi(yytext); return NOMBRE; }
 ,          { return VIRGULE; }

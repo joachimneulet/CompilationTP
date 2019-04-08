@@ -107,11 +107,13 @@ int main(int argc, char **argv) {
     affiche_n_prog(n);
   }
   if(affiche_code3a) {
+    afficheTabSymb = 0;
     yyparse();
     parcours_n_prog(n);
     code3a_affiche_code();
   }
   if(affiche_tabsymb) {
+    afficheTabSymb = 1;
     yyparse();
     parcours_n_prog(n);
   }

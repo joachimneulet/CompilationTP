@@ -95,7 +95,7 @@ n_exp *cree_n_exp_lire(void);
    type */
 struct n_instr_ {
   enum {affecteInst, siInst, tantqueInst, appelInst, retourInst, ecrireInst,
-        videInst, blocInst } type;
+        videInst, blocInst, pourInst } type;
   union{
     struct{n_var *var; n_exp *exp;} affecte_;
     struct{n_exp *test; struct n_instr_ *alors; struct n_instr_ *sinon;} si_;
@@ -103,6 +103,7 @@ struct n_instr_ {
     n_appel *appel;
     struct{n_exp *expression;} retour_;
     struct{n_exp *expression;} ecrire_;
+    struct{struct n_instr_ *init; struct n_exp_ *expression; struct n_instr_ *increment; struct n_instr_ *faire;} pour_;
     n_l_instr *liste;
   }u;
 };
@@ -185,5 +186,7 @@ struct n_l_dec_{
    passer queue=NULL */
 n_l_dec *cree_n_l_dec(n_dec *tete, n_l_dec *queue);
 /*-------------------------------------------------------------------------*/
+
+n_instr *cree_n_instr_pour(n_instr *init, n_exp *expression, n_instr *increment, n_instr *faire);
 
 #endif
